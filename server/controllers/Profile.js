@@ -1,4 +1,4 @@
-import Profile from "../models/Profile";
+import Profile from "../models/profile";
 
 import User from '../models/User';
 
@@ -85,3 +85,6 @@ exports.deleteAccount=async (req,res)=>{
         });
     }
 }
+
+
+//get all user details HW
