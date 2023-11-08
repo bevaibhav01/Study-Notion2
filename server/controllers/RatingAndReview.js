@@ -124,8 +124,7 @@ exports.getAllRatings=async (req,res){
 
        //get all reviews
 
-        const allreviews=await RatingAndReviews.find({}).sort({rating:'desc'}).populate({path:'user',
-    select:"firstName lastName email image"})
+        const allreviews=await RatingAndReviews.find({}).sort({rating:'desc'}).populate({path:'user',select:"firstName lastName email image"})
     .populate({
         path:"course",
         select:"courseName"
