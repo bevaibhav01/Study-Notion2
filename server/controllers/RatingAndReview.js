@@ -124,19 +124,26 @@ exports.getAllRatings=async (req,res){
 
        //get all reviews
 
-        const allreviews=await RatingAndReviews.find({}).sort({rating:'desc'}).populate({path:'user',select:"firstName lastName email image"})
-    .populate({
-        path:"course",
-        select:"courseName"
-    }).exec();
-
-    return res.status(200).json({
-        success:true,
-        data:allreviews
-    })
+       const allreviews = await RatingAndReviews
+       .find({})
+       .sort({ rating: 'desc' })
+       .populate({
+         path: 'user',
+         select: 'firstName lastName email image'
+       })
+       .populate({
+         path: 'course',
+         select: 'courseName'
+       });
+     
 
 
     }catch(error){
+        console.error(error); // Log the error for debugging
+    return res.status(500).json({
+    success: false,
+    error: 'Internal server error'
+  });
 
     }
 }
