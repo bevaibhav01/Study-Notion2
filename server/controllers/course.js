@@ -108,3 +108,47 @@ const uploadImageCloudinary=require('../utils/imageUploader')
            });
     }
  }
+
+ //get course details
+
+ exports.getCourseDetails=async (req,res)=>{
+    try{
+        //get id
+        const {courseId}=req.body;
+
+        //find course details
+        const courseDetails=await Course.find({_id:courseId}).populate(
+            {
+                path:"instructor",populate:{
+                    path:"additionalDetails",
+                },
+            }
+        ).populate('category').populate("ratingsAndreviews").populate({
+            path:"coursecontent",populat:{
+                path:'subSection',
+            },
+        }).exec();
+
+        //validation
+        if(!courseDetails){
+            return res.status(400).json({
+                success:false,
+                message:"Course not exists"
+            })
+        }
+
+        //return response
+        return res.status(200).json({
+            success:true,
+            message:"Data fetched",
+            courseDetails,
+        })
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"something went wrong"
+        })
+
+    }
+ }

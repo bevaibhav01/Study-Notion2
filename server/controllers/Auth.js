@@ -7,6 +7,7 @@ const bcrypt =require('bcrypt')
 const jwt=require('jsonwebtoken')
 require('dotenv').config();
 
+//REVIEW THE CODE AGAIN 
 
 //send OTP
 exports.sendOTP=async (req,res)=>{
