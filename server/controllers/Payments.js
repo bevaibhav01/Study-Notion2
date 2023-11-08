@@ -100,3 +100,60 @@ exports.capturePayment=async (req,res)=>{
 
 
 //verify signature
+
+exports.verifySignature=async (req,res)=>{
+    const webHookSecret='12345678';
+    const signature=req.headers["x-razorpay-signature"];
+
+    const shasum=crypto.createHmac("sha256",webHookSecret)
+     
+    shasum.update(JSON.stringify(req.body));
+
+    const digest=shasum.digest('hex');
+    if(signature===digest){
+        //payment authorized
+        console.log("Payment authorized");
+
+        const {courseId,userId}=req.body.payload.payment.entity.notes;
+
+        try{
+            //fulfil action
+
+            //find the course and enroll the 
+            const enrolledCourse=await Course.findByIdAndUpdate({_id:courseI},{$push:{studentsEnrolled:userId}},{new:true},);
+            if(!enrolledCourse){
+                return res.status(500).json({
+                    sucess:false,
+                    message:"Course not exits"
+                })
+            }
+
+            //find user and add course
+
+            const userEnrolled=await User.findByIdAndUpdate({_id:userId},{$push:{courses:courseId}},{new:true});
+
+            //mail send of confirmation
+
+            const emailResponse=await mailSender(
+                userEnrolled.email,
+                "Congratulations from codehelp",
+                "Congratulations , you onboard on the course",
+            );
+
+            return res.status(200).json({
+                success:true,
+                message:error.message
+            })
+
+
+        }catch(error){
+            return res.status(400).json({
+                sucess:false,
+                message:"Something went wrong"
+            })
+        }
+
+    }
+
+
+}
