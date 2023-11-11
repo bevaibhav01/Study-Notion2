@@ -134,7 +134,13 @@ exports.getAllRatings=async (req,res){
        .populate({
          path: 'course',
          select: 'courseName'
-       });
+       }).exec();
+
+       return res.status(200).json({
+        success:true,
+        message:"All reviews fetch",
+        data:allreviews,
+       })
      
 
 
