@@ -1,8 +1,8 @@
-const Tag=require('../models/Tag');
+const Category=require('../models/Category');
 
 //create tag handler
 
-exports.createTag=async (req,res)=>{
+exports.createCategory=async (req,res)=>{
     try{
         //fetch data
          const {name,description}=req.body;
@@ -16,7 +16,7 @@ exports.createTag=async (req,res)=>{
          }
 
          //db entry
-         const tagDetails=await Tag.create({
+         const tagDetails=await Category.create({
             name:name,description:description,
          });
          console.log(tagDetails);
@@ -40,9 +40,9 @@ exports.createTag=async (req,res)=>{
 
 
 //get all tags handler
-exports.showAlllTags=async (req,res)=>{
+exports.showAlllCategory=async (req,res)=>{
     try{
-        const allTags=await Tag.find({},{name:true,description:true})
+        const allTags=await Category.find({},{name:true,description:true})
         res.status(200).json({
             success:true,
             message:"All tage returned",
@@ -53,5 +53,53 @@ exports.showAlllTags=async (req,res)=>{
             success:false,
             message:error.message,
         })
+    }
+}
+
+
+//category page details
+
+exports.categoryPageDetails=async (req,res)=>{
+    try{
+        //get category id
+        const {categoryId}=req.body;
+        //get specific 
+        const specificCategory=await Category.find(categoryId).populate("courses").exec();
+
+        //validation
+        if(!specificCategory){
+            return res.status(404).json({
+                success:false,
+                message:'Data not found'
+            });
+        }
+
+
+        //get courses
+        const diffCategory=await Category.find({
+        _id:{$ne:categoryId},
+        }).populate("courses").exec();
+
+
+        // top selling HW--> do it urself
+
+        //return res
+        return res.status(200).json({
+            success:true,
+            data:{
+                specificCategory,
+                diffCategory,
+                topSelling
+            }
+        });
+
+
+    }catch(error){
+
+        return res.status(500).json({
+            success:false,
+            message:'Something went wrong'
+        });
+
     }
 }
