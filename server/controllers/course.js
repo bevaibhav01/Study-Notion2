@@ -1,5 +1,5 @@
 const Course=require('../models/Course');
-const Tag=require('../models/Category');
+const Category=require('../models/Category');
 const User=require('../models/User');
 const uploadImageCloudinary=require('../utils/imageUploader')
 
@@ -34,7 +34,7 @@ const uploadImageCloudinary=require('../utils/imageUploader')
    }
 //verify user.id and instructior id is same
    //tag validation
-   const tagDetails=await Tag.findById(tag);
+   const tagDetails=await Category.findById(tag);
    if(!tagDetails){
            return res.status(404).json({
             success:false,
@@ -66,6 +66,18 @@ const uploadImageCloudinary=require('../utils/imageUploader')
         courses:newCourse._id
     }},{new:true});
 
+
+    //update in category 
+    const categoryDetails2 = await Category.findByIdAndUpdate(
+        { _id: category },
+        {
+          $push: {
+            courses: newCourse._id,
+          },
+        },
+        { new: true }
+      )
+
     //update the tag schema
     //todo
 
@@ -89,7 +101,7 @@ const uploadImageCloudinary=require('../utils/imageUploader')
 
  //get all course
 
- exports.showAllCourses=async (req,res)=>{
+ exports.getAllCourses=async (req,res)=>{
     try{
         const allCourses=await Course.find({},{courseName:true,courseDescription:true,thumbnail:true,
         instructor:true,ratingAndReview:true,studentsEnrolled:true}).populate('instructor').exec();

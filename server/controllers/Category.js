@@ -1,6 +1,6 @@
 const Category=require('../models/Category');
 
-//create tag handler
+//create category handler
 
 exports.createCategory=async (req,res)=>{
     try{

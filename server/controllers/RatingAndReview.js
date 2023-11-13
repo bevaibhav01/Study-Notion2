@@ -117,7 +117,7 @@ exports.getAvgRating=async (req,res)=>{
 
 //get all ratings
 
-exports.getAllRatings=async (req,res){
+exports.getAllRatings=async (req,res)=>{
     try{
 
        // const {courseId}=req.body;
