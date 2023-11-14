@@ -21,7 +21,7 @@ exports.auth=async (req,res,next)=>{
        //verify Token
        try{
         const decode= jwt.verify(token,process.env.JWT_SECRET);
-        console.log(decode);
+        console.log("decode",decode);
         req.user=decode;
 
        }catch(error){
@@ -49,7 +49,7 @@ exports.auth=async (req,res,next)=>{
 
 //isstudent
 
-exports.isStudent=async (req,res)=>{
+exports.isStudent=async (req,res,next)=>{
     try{
         if(req.user.accountType!=='Student'){
             return res.status(401).json({
@@ -69,12 +69,12 @@ exports.isStudent=async (req,res)=>{
 
 
 //isinstructor
-exports.isInstructor=async (req,res)=>{
+exports.isInstructor=async (req,res,next)=>{
     try{
         if(req.user.accountType!=='Instructor'){
             return res.status(401).json({
                 success:false,
-                message:"For student only"
+                message:"For Instructor only"
             })
         }
         next();
@@ -89,20 +89,22 @@ exports.isInstructor=async (req,res)=>{
 
 
 //isadmin
-exports.isAdmin=async (req,res)=>{
-    try{
-        if(req.user.accountType!=='Admin '){
+exports.isAdmin = async (req, res, next) => {
+    try {
+        console.log(req.user.accountType);
+        if (req.user.accountType !== 'Admin') {
             return res.status(401).json({
-                success:false,
-                message:"For student only"
-            })
+                success: false,
+                message: "For Admin only"
+            });
         }
+        // If the user is an admin, call next() to proceed to the next middleware or route handler.
         next();
 
-    }catch(error){
+    } catch (error) {
         return res.status(500).json({
-            success:false,
-            message:"User role not valid"
-        })
+            success: false,
+            message: "User role not valid"
+        });
     }
-}
+};

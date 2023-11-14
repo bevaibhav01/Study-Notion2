@@ -1,6 +1,7 @@
 
 //importing mongoose library
 const mongoose=require('mongoose');
+//const profile=require('../models/profile');
 
 const userSchema=new mongoose.Schema({
     firstName:{
@@ -32,7 +33,7 @@ const userSchema=new mongoose.Schema({
     additionalDetails:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-        ref:"profile",
+        ref:"Profile",
     },
     courses:[
         {

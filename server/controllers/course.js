@@ -1,25 +1,29 @@
 const Course=require('../models/Course');
 const Category=require('../models/Category');
 const User=require('../models/User');
-const uploadImageCloudinary=require('../utils/imageUploader')
+const {uploadImageCloudinary }=require('../utils/imageUploader')
 
  //create course
 
  exports.createCourse=async (req,res)=>{
     try{
    //fetch data 
-   const {courseName,courseDescription,whatYouWillLearn,price,tag}=req.body;
-
+   const {courseName,courseDescription,whatYouWillLearn,price,category}=req.body;
+   let status;
    //get thumbnail
-   const thumbnail=req.files.thumbaiImages;
+   const thumbnail=req.files.thumbnailImages;
 
    //validation
-   if(!courseName||!courseDescription||!whatYouWillLearn||!price||!tag||!thumbnail){
+   if(!courseName||!courseDescription||!whatYouWillLearn||!price||!category||!thumbnail){
     return res.status(400).json({
         success:false,
         message:'All files required',
     })
    }
+
+   //if (!status || status === undefined) {
+    status = "Draft"
+  //}
 
    //check for instructor
    const userId=req.user.id;
@@ -34,8 +38,8 @@ const uploadImageCloudinary=require('../utils/imageUploader')
    }
 //verify user.id and instructior id is same
    //tag validation
-   const tagDetails=await Category.findById(tag);
-   if(!tagDetails){
+   const categoryDetails=await Category.findById(category);
+   if(!categoryDetails){
            return res.status(404).json({
             success:false,
             message:'Tag Details not found',
@@ -53,8 +57,9 @@ const uploadImageCloudinary=require('../utils/imageUploader')
     instructor:instructorDetails._id,
     whatYouWillLearn:whatYouWillLearn,
     price,
-    tag:tag,
+    Category:category,
     thumbnail:thumbnailImage.secure_url,
+    status:status,
 
    });
    
@@ -89,7 +94,9 @@ const uploadImageCloudinary=require('../utils/imageUploader')
     });
 
 }catch(error){
+    console.log(error)
     return res.status(500).json({
+        
         success:false,
         message:'Somethings went wrong ',
        });
@@ -129,17 +136,29 @@ const uploadImageCloudinary=require('../utils/imageUploader')
         const {courseId}=req.body;
 
         //find course details
-        const courseDetails=await Course.find({_id:courseId}).populate(
-            {
-                path:"instructor",populate:{
-                    path:"additionalDetails",
-                },
-            }
-        ).populate('category').populate("ratingsAndreviews").populate({
-            path:"coursecontent",populat:{
-                path:'subSection',
-            },
-        }).exec();
+        const courseDetails = await Course.findOne({
+            _id: courseId,
+          })
+            .populate({
+              path: "instructor",
+              populate: {
+                path: "additionalDetails",
+              },
+            })
+            .populate("Category")
+            .populate("ratingAndReview")
+            .populate({
+              path: "courseContent",
+              populate: {
+                path: "subSection",
+                select: "-videoUrl",
+              },
+            })
+            .exec()
+        //console.log(courseDetails.courseCone);
+           
+
+        //POPULATE RATIN AND REVIEW LATER
 
         //validation
         if(!courseDetails){
@@ -157,6 +176,7 @@ const uploadImageCloudinary=require('../utils/imageUploader')
         })
 
     }catch(error){
+        console.log(error);
         return res.status(500).json({
             success:false,
             message:"something went wrong"

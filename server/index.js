@@ -3,6 +3,7 @@ const app=express();
 
 const userRoutes=require('./routes/User');
 const courseRouter=require('./routes/Course');
+const profileRoutes=require('./routes/profile');
 
 //const database=require('./config/database');
 //install cors for frontend and backend communication
@@ -55,6 +56,7 @@ cloudinaryConnect();
 
 app.use('/api/v1/auth',userRoutes);
 app.use("/api/v1/course",courseRouter);
+app.use("/api/v1/profile",profileRoutes);
 
 app.get('/',(req,res)=>{
     return res.json({

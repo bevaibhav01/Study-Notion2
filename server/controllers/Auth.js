@@ -2,7 +2,7 @@
 const User=require('../models/User');
 const OTP=require("../models/OTP");
 const otpGenrator=require('otp-generator')
-const profile=require('../models/profile');
+const Profile=require('../models/profile');
 const bcrypt =require('bcrypt')
 const jwt=require('jsonwebtoken')
 const mailSender=require('../utils/mailSender')
@@ -121,17 +121,19 @@ exports.signUp=async (req,res)=>{
     }
 
     //find most recent otp for user
-    const recentOtp=await  OTP.find({email}).sort({createdAt:-1}).limit(1);
+    const recentOtp=await  OTP.find({email}).sort({createdAt:-1});
     console.log(recentOtp,'recent otp');
 
     //validate otp
-    if(recentOtp.length==0){
+    if(recentOtp.length===0){
         return res.status(400).json({
             success:false,
             message:"OTP Not found"
         })
 
-    }else if(otp!=recentOtp){
+    }else if(otp!==recentOtp[0].otp){
+        console.log(otp)
+        console.log(recentOtp)
         return res.status(400).json({
             success:false,
             message:"Invalid OTP"
@@ -143,7 +145,7 @@ exports.signUp=async (req,res)=>{
     const hashedPassword=await bcrypt.hash(password,10);
 
     //create db entry
-    const profileDetails=await profile.create({gender:null,dateOfBirth:null,about:null,contactNumber:null});
+    const profileDetails=await Profile.create({gender:null,dateOfBirth:null,about:null,contactNumber:null});
     const user=await User.create({firstName,lastName,email,contactNumber,password:hashedPassword,accountType,additionalDetails:profileDetails._id,
     image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
     })

@@ -1,52 +1,71 @@
-import Profile from "../models/profile";
+const Profile=require('../models/profile');
 
-import User from '../models/User';
+const User=require('../models/User');
+
+const {uploadImageCloudinary}=require('../utils/imageUploader');
 
 
-export async function updateProfile(req,res){
-    try{
-        //get data
-        const {dateOfBirth="",about="",contactNumber,gender}=req.body;
+exports.updateProfile = async (req, res) => {
+    try {
+        // Get data
+        const { dateOfBirth = "", about = "", contactNumber, gender } = req.body;
 
-        //get user id
-        const id=req.user.id;
+        // Get user id
+        const id = req.user.id;
 
-        //validation
-
-        if(!gender||!contactNumber||!id){
-            return res.status(200).json({
-                success:false,
-                message:"went wrong"
-            })
+        // Validation
+        if (!gender || !contactNumber || !id) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing required fields",
+            });
         }
-        //find profile
-        const  userDetails=await User.findById({id});
-        const profileId=userDetails.additionalDetails;
-        const profileDetails=await Profile.findById(profileId);
 
-        //update profile
-        profileDetails.dateOdfBirth=dateOfBirth;
-        profileDetails.contactNumber=contactNumber;
-        profileDetails.gender=gender;
-        profileDetails.about=about;
+        // Find user
+        const userDetails = await User.findById(id);
+        if (!userDetails) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
 
-        //save in db the change
+        // Get profile id from user details
+        const profileId = userDetails.additionalDetails;
+
+        // Find profile
+        const profileDetails = await Profile.findById(profileId);
+        if (!profileDetails) {
+            return res.status(404).json({
+                success: false,
+                message: "Profile not found",
+            });
+        }
+
+        // Update profile
+        profileDetails.dateOfBirth = dateOfBirth;
+        profileDetails.contactNumber = contactNumber;
+        profileDetails.gender = gender;
+        profileDetails.about = about; // Only update if 'about' is provided
+
+        // Save changes in the database
         await profileDetails.save();
-        //return response
-        return res.status(200).json({
-            success:true,
-            message:"True",
-            profileDetails
-        });
 
-    }catch(error){
+        // Return response
+        return res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+            profileDetails,
+        });
+    } catch (error) {
+        console.error(error);
         return res.status(500).json({
-            success:false,
-            message:"went wrong"
-        })
-        
+            success: false,
+            message: "Something went wrong",
+        });
     }
-}
+};
+
 
 //delete account 
 
@@ -88,3 +107,55 @@ exports.deleteAccount=async (req,res)=>{
 
 
 //get all user details HW
+exports.getAllUserDetails = async (req, res) => {
+    try {
+      const id = req.user.id
+      const userDetails = await User.findById(id)
+        .populate("additionalDetails")
+        .exec()
+      console.log(userDetails)
+      res.status(200).json({
+        success: true,
+        message: "User Data fetched successfully",
+        data: userDetails,
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      })
+    }
+  }
+
+
+
+
+
+exports.updateDisplayPicture = async (req, res) => {
+    try {
+      const displayPicture = req.files.displayPicture
+      const userId = req.user.id
+      const image = await uploadImageCloudinary(
+        displayPicture,
+        process.env.FOLDER_NAME,
+        1000,
+        1000
+      )
+      console.log(image)
+      const updatedProfile = await User.findByIdAndUpdate(
+        { _id: userId },
+        { image: image.secure_url },
+        { new: true }
+      )
+      res.send({
+        success: true,
+        message: `Image Updated successfully`,
+        data: updatedProfile,
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      })
+    }
+  }

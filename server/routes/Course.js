@@ -28,6 +28,8 @@ const {
     getAllRating,
   } = require("../controllers/RatingAndReview");
 
+  const {createCategory,showAllCategories,categoryPageDetails}=require('../controllers/Category');
+
 
   // Courses can Only be Created by Instructors
 router.post("/createCourse", auth, isInstructor, createCourse)
@@ -35,6 +37,14 @@ router.post("/createCourse", auth, isInstructor, createCourse)
 router.post("/addSection", auth, isInstructor, createSection)
 // Update a Section
 router.post("/updateSection", auth, isInstructor, updateSection)
+
+
+// Category can Only be Created by Admin
+// TODO: Put IsAdmin Middleware here
+router.post("/createCategory", auth, isAdmin, createCategory)
+router.get("/showAllCategories", showAllCategories)
+// router.post("/getCategoryPageDetails", categoryPageDetails)
+
 // Delete a Section
 //router.post("/deleteSection", auth, isInstructor, deleteSection)
 // Edit Sub Section
@@ -46,7 +56,7 @@ router.post("/updateSection", auth, isInstructor, updateSection)
 // // Get all Registered Courses
 // router.get("/getAllCourses", getAllCourses)
 // // Get Details for a Specific Courses
-// router.post("/getCourseDetails", getCourseDetails)
+ router.post("/getCourseDetails", getCourseDetails)
 // // Get Details for a Specific Courses
 // router.post("/getFullCourseDetails", auth, getFullCourseDetails)
 // // Edit Course routes

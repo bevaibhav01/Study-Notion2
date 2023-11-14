@@ -23,7 +23,7 @@ const courseSchema=new mongoose.Schema({
    courseContent:[
     {
         type:mongoose.Schema.Types.ObjectId,
-        ref:'SubSection'
+        ref:'Section'
     }
    ],
 
@@ -40,9 +40,12 @@ const courseSchema=new mongoose.Schema({
     type:String,
   },
 
-  tag:{
+  Category:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:'Tag',
+    ref:'Category',
+  },
+  tag:{
+    type:[String],
   },
 
   studentsEnrolled:[
@@ -51,7 +54,18 @@ const courseSchema=new mongoose.Schema({
         required:true,
         ref:'User',
     }
-  ]
+  ],
+  status: {
+		type: String,
+		enum: ["Draft", "Published"],
+	},
+  createdAt: {
+		type:Date,
+		default:Date.now
+	},
+  instructions: {
+		type: [String],
+	},
 
 });
 
