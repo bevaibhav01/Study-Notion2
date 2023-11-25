@@ -151,7 +151,7 @@ const {uploadImageCloudinary }=require('../utils/imageUploader')
               path: "courseContent",
               populate: {
                 path: "subSection",
-                select: "-videoUrl",
+               
               },
             })
             .exec()

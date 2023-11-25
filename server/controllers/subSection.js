@@ -1,6 +1,6 @@
 const SubSection=require('../models/SubSection');
 const Section=require('../models/Section');
-const {uploadImageToCloudinary}=require('../utils/imageUploader')
+const {uploadImageCloudinary}=require('../utils/imageUploader')
 
 //create subsection
 
@@ -10,17 +10,18 @@ exports.createSubSection=async (req,res)=>{
         const {sectionId,title,timeDuration,description}=req.body;
 
         //extract file/video
-        const video=req.files.videoFiles;
+        const video=req.files.video;
 
         //validation
         if(!sectionId||!title||!timeDuration||!description||!video){
+          console.log(sectionId,title,timeDuration,description,video);
             return res.status(400).json({
                 succes:false,
                 message:"all required"
             })
         }
         //upload video to cloudinary
-        const uploadDetails=await uploadImageToCloudinary(video,process.env.FOLDER_NAME);
+        const uploadDetails=await uploadImageCloudinary(video,process.env.FOLDER_NAME);
         //create subsection
         const newSubSection=await SubSection.create({
             title:title,
@@ -49,6 +50,7 @@ exports.createSubSection=async (req,res)=>{
         })
 
     }catch(error){
+      console.log(error);
         return res.status(500).json({
             succes:false,
             message:"something went wrong"
