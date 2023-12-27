@@ -6,21 +6,12 @@ import { useLocation } from 'react-router-dom'
 import { matchPath } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
-import profileDropDown from '../core/Auth/profileDropDown'
+import ProfileDropDown from '../core/Auth/ProfileDropDown'
 import { apiConnector } from '../../services/apiConnector'
-import { categories } from '../../services/api'
+import { categories } from '../../services/apis'
 import { BsChevronDown } from "react-icons/bs"
 
-const subLinks=[
-  {
-    name:"python",
-    link:"/catalog/python"
-  },
-  {
-    name:"webdev",
-    link:"/catalog/webdev"
-  },
-]
+
 
 
 const Navbar = () => {
@@ -29,26 +20,24 @@ const Navbar = () => {
   const {user}=useSelector((state)=> state.profile)||{};
   const {totalItems}=useSelector((state)=> state.cart)||{};
 
-  // const [subLinks,setSubLinks]=useState([]);
+  const [subLinks,setSubLinks]=useState([]);
   const [loading, setLoading] = useState(false)
 
-  // const fetchSublinks=async()=>{
-  //   try{
-  //     const result=await apiConnector("GET",categories.CATEGORIES_API);
-  //     console.log('PRINTING SUBLINKS',result);
-  //     setSubLinks(result.data.data);
-      
+  useEffect(() => {
+    ;(async () => {
+      setLoading(true)
+      try {
+        const res = await apiConnector("GET", categories.CATEGORIES_API)
+        console.log(res.data.allCategories);
+        setSubLinks(res.data.allCategories)
+        console.log(res.data.data);
+      } catch (error) {
+        console.log("Could not fetch Categories.", error)
+      }
+      setLoading(false)
+    })()
+  }, [])
 
-  //   }catch(error){
-  //     console.log(error)
-  //     console.log("COULD NOT FETCH CATEGORIES")
-
-  //   }
-  // }
-
-  // useEffect(()=>{
-  //   fetchSublinks()
-  // },[])
 
 
 
@@ -167,7 +156,7 @@ const Navbar = () => {
             </Link>
           )}
 
-   {token !== null &&  <profileDropdown/>}
+   {token !== null &&  <ProfileDropDown/>}
 
         <button className="mr-4 md:hidden">
           <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
