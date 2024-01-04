@@ -163,7 +163,7 @@ const Navbar = () => {
 
    {token!==null && (
     
-    console.log(token),
+    
    <ProfileDrop/>)}
 
         <button className="mr-4 md:hidden">

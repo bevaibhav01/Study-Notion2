@@ -11,7 +11,7 @@ import { logout } from "../../../services/operations/authAPI"
 
 const ProfileDropDown = () => {
     const { user } = useSelector((state) => state.profile)
-    console.log(user,"user printing")
+   
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
