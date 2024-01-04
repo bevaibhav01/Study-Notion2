@@ -11,7 +11,10 @@ const {uploadImageCloudinary }=require('../utils/imageUploader')
    const {courseName,courseDescription,whatYouWillLearn,price,category}=req.body;
    let status;
    //get thumbnail
-   const thumbnail=req.files.thumbnailImages;
+   //const thumbnail=req.files.thumbnailImages;
+   const thumbnail = req.files.thumbnailImage
+  // const thumbnail=req.body.thumbnailImage;
+   console.log(courseName,courseDescription,whatYouWillLearn,price,category,thumbnail);
 
    //validation
    if(!courseName||!courseDescription||!whatYouWillLearn||!price||!category||!thumbnail){

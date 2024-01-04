@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Cart from './components/core/Dashboard/Cart/index'
+import AddCourse from './components/core/Dashboard/AddCourse/index'
 
 
 
@@ -100,17 +101,17 @@ function App() {
         )
       }
 
-      {/* {
+      {
         user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
           <>
-          <Route path="dashboard/instructor" element={<Instructor />} />
+          {/* <Route path="dashboard/instructor" element={<Instructor />} /> */}
           <Route path="dashboard/add-course" element={<AddCourse />} />
-          <Route path="dashboard/my-courses" element={<MyCourses />} />
+          {/* <Route path="dashboard/my-courses" element={<MyCourses />} />
           <Route path="dashboard/edit-course/:courseId" element={<EditCourse />} />
-          
+           */}
           </>
         )
-      } */}
+      }
 
 
     </Route>

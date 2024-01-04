@@ -26,6 +26,7 @@ exports.auth=async (req,res,next)=>{
 
        }catch(error){
         //verification isseu
+        console.log(error,"error")
         return res.status(401).json({
             success:false,
             message:"Token not valid"
@@ -71,6 +72,7 @@ exports.isStudent=async (req,res,next)=>{
 //isinstructor
 exports.isInstructor=async (req,res,next)=>{
     try{
+        console.log("user printing",req.user);
         if(req.user.accountType!=='Instructor'){
             return res.status(401).json({
                 success:false,

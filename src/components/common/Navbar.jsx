@@ -7,7 +7,7 @@ import { matchPath } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
 
-import { apiConnector } from '../../services/apiConnector'
+import { apiConnector } from '../../services/apiconnector'
 import { categories } from '../../services/apis'
 import { BsChevronDown } from "react-icons/bs"
 import ProfileDrop from "../core/Auth/ProfileDropDown"
