@@ -143,6 +143,8 @@ export const createSection = async (data, token) => {
       throw new Error("Could Not Create Section")
     }
     toast.success("Course Section Created")
+    console.log(response,"response of section")
+    console.log(response?.data.updatedCourse,"response data")
     result = response?.data?.updatedCourse
   } catch (error) {
     console.log("CREATE SECTION API ERROR............", error)

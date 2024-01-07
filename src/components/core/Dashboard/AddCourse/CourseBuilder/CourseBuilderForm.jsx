@@ -47,7 +47,7 @@ export default function CourseBuilderForm() {
         },
         token
       )
-      // console.log("edit", result)
+       console.log("edit", result)
     } else {
       result = await createSection(
         {
@@ -56,9 +56,10 @@ export default function CourseBuilderForm() {
         },
         token
       )
+      console.log(result,"create result")
     }
     if (result) {
-      // console.log("section result", result)
+       console.log("section result", result)
       dispatch(setCourse(result))
       setEditSectionName(null)
       setValue("sectionName", "")
@@ -140,7 +141,12 @@ export default function CourseBuilderForm() {
           )}
         </div>
       </form>
+      {/* {
+         console.log(course,"course details from builder")
+       
+      } */}
       {course.courseContent.length > 0 && (
+        console.log("nested view"),
         <NestedView handleChangeEditSectionName={handleChangeEditSectionName} />
       )}
       {/* Next Prev Button */}
