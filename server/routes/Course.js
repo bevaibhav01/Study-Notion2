@@ -10,7 +10,7 @@ const {
   editCourse,
   getInstructorCourses,
   deleteCourse,
-} = require("../controllers/Course")
+} = require("../controllers/course")
 
 // Importing Middlewares
 const { auth, isInstructor, isStudent, isAdmin } = require("../middlewares/auth")
@@ -27,7 +27,7 @@ const {
     createSubSection,
     updateSubSection,
     deleteSubSection,
-  } = require("../controllers/Subsection")
+  } = require("../controllers/subSection")
   
   // Rating Controllers Import
   const {

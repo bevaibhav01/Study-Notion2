@@ -4,58 +4,56 @@ const {uploadImageCloudinary}=require('../utils/imageUploader')
 
 //create subsection
 
-exports.createSubSection=async (req,res)=>{
-    try{
-        //fetch data from body
-        const {sectionId,title,timeDuration,description}=req.body;
+// Create a new sub-section for a given section
+exports.createSubSection = async (req, res) => {
+  try {
+    // Extract necessary information from the request body
+    const { sectionId, title, description } = req.body
+    const video = req.files.video
 
-        //extract file/video
-        const video=req.files.video;
-
-        //validation
-        if(!sectionId||!title||!timeDuration||!description||!video){
-          console.log(sectionId,title,timeDuration,description,video);
-            return res.status(400).json({
-                succes:false,
-                message:"all required"
-            })
-        }
-        //upload video to cloudinary
-        const uploadDetails=await uploadImageCloudinary(video,process.env.FOLDER_NAME);
-        //create subsection
-        const newSubSection=await SubSection.create({
-            title:title,
-            timeDuration:timeDuration,
-            description:description,
-            videoUrl:uploadDetails.secure_url,
-        })
-        //update section with id of this subsection
-        const updatedSection=await Section.findByIdAndUpdate({_id:sectionId},{
-            $push:{
-                subSection:newSubSection._id,
-            }
-        },{new:true});
-
-       //HW:log updated section here, after adding populate query
-
-
-
-        //return response
-
-        return res.status(500).json({
-            success:true,
-            message:"sub section done",
-            updatedSection,
-
-        })
-
-    }catch(error){
-      console.log(error);
-        return res.status(500).json({
-            succes:false,
-            message:"something went wrong"
-        })
+    // Check if all necessary fields are provided
+    if (!sectionId || !title || !description || !video) {
+      return res
+        .status(404)
+        .json({ success: false, message: "All Fields are Required" })
     }
+    console.log(video)
+
+    // Upload the video file to Cloudinary
+    const uploadDetails = await uploadImageCloudinary(
+      video,
+      process.env.FOLDER_NAME
+    )
+    console.log(uploadDetails)
+    // Create a new sub-section with the necessary information
+    console.log('creating subsection');
+    const SubSectionDetails = await SubSection.create({
+      title: title,
+      timeDuration: `${uploadDetails.duration}`,
+      description: description,
+      videoUrl: uploadDetails.secure_url,
+    })
+
+    console.log('created now update');
+
+    // Update the corresponding section with the newly created sub-section
+    const updatedSection = await Section.findByIdAndUpdate(
+      { _id: sectionId },
+      { $push: { subSection: SubSectionDetails._id } },
+      { new: true }
+    ).populate("subSection")
+
+    // Return the updated section in the response
+    return res.status(200).json({ success: true, data: updatedSection })
+  } catch (error) {
+    // Handle any errors that may occur during the process
+    console.error("Error creating new sub-section:", error)
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    })
+  }
 }
 
 //HW UPDATE SUBSECTION 
