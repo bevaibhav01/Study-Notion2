@@ -20,6 +20,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Cart from './components/core/Dashboard/Cart/index'
 import AddCourse from './components/core/Dashboard/AddCourse/index'
+import MyCourses from "./components/core/Dashboard/MyCourses";
+import EditCourse from "./components/core/Dashboard/EditCourse";
 
 
 
@@ -106,9 +108,9 @@ function App() {
           <>
           {/* <Route path="dashboard/instructor" element={<Instructor />} /> */}
           <Route path="dashboard/add-course" element={<AddCourse />} />
-          {/* <Route path="dashboard/my-courses" element={<MyCourses />} />
+          <Route path="dashboard/my-courses" element={<MyCourses />} />
           <Route path="dashboard/edit-course/:courseId" element={<EditCourse />} />
-           */}
+          
           </>
         )
       }

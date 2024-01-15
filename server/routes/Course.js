@@ -68,11 +68,11 @@ router.post("/deleteSection", auth, isInstructor, deleteSection)
 // // Get Details for a Specific Courses
 router.post("/getFullCourseDetails", auth, getFullCourseDetails)
 // // Edit Course routes
-//router.post("/editCourse", auth, isInstructor, editCourse)
+router.post("/editCourse", auth, isInstructor, editCourse)
 // // Get all Courses Under a Specific Instructor
-// router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses)
+router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses)
 // // Delete a Course
-//router.delete("/deleteCourse", deleteCourse)
+router.delete("/deleteCourse", deleteCourse)
 
 //router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
 

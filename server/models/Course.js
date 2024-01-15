@@ -27,7 +27,7 @@ const courseSchema=new mongoose.Schema({
     }
    ],
 
-  ratingAndReview:[{
+  ratingAndReviews:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:'RatingAndReviews',
   }],

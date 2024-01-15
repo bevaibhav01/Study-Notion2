@@ -87,6 +87,7 @@ export default function CourseInformationForm() {
       // console.log("changes after editing form values:", currentValues)
       // console.log("now course:", course)
       // console.log("Has Form Changed:", isFormUpdated())
+      console.log(course)
       if (isFormUpdated()) {
         const currentValues = getValues()
         const formData = new FormData()
@@ -107,7 +108,7 @@ export default function CourseInformationForm() {
         if (currentValues.courseBenefits !== course.whatYouWillLearn) {
           formData.append("whatYouWillLearn", data.courseBenefits)
         }
-        if (currentValues.courseCategory._id !== course.category._id) {
+        if (currentValues.courseCategory._id !== course.Category._id) {
           formData.append("category", data.courseCategory)
         }
         if (
