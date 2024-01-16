@@ -1,4 +1,8 @@
 const Category=require('../models/Category');
+const { Mongoose } = require("mongoose");
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max)
+}
 
 //create category handler
 
