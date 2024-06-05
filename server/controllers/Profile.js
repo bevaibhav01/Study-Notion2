@@ -1,8 +1,10 @@
 const Profile=require('../models/profile');
-
+const Course = require("../models/Course")
 const User=require('../models/User');
-
+const CourseProgress = require("../models/CourseProgress")
 const {uploadImageCloudinary}=require('../utils/imageUploader');
+const { convertSecondsToDuration } = require("../utils/secToDuration")
+const mongoose = require("mongoose")
 
 
 exports.updateProfile = async (req, res) => {
@@ -161,10 +163,7 @@ exports.updateDisplayPicture = async (req, res) => {
   }
 
   exports.getEnrolledCourses = async (req, res) => {
-    console.log("USER enrolled")
     try {
-      console.log(" iam running");
-      console.log("token",req.token)
       const userId = req.user.id
       let userDetails = await User.findOne({
         _id: userId,
@@ -222,11 +221,38 @@ exports.updateDisplayPicture = async (req, res) => {
         data: userDetails.courses,
       })
     } catch (error) {
-      console.log(error)
       return res.status(500).json({
         success: false,
         message: error.message,
-        error:error,
       })
     }
   }
+
+  exports.instructorDashboard = async (req, res) => {
+    try {
+      const courseDetails = await Course.find({ instructor: req.user.id })
+  
+      const courseData = courseDetails.map((course) => {
+        const totalStudentsEnrolled = course.studentsEnroled.length
+        const totalAmountGenerated = totalStudentsEnrolled * course.price
+  
+        // Create a new object with the additional fields
+        const courseDataWithStats = {
+          _id: course._id,
+          courseName: course.courseName,
+          courseDescription: course.courseDescription,
+          // Include other course properties as needed
+          totalStudentsEnrolled,
+          totalAmountGenerated,
+        }
+  
+        return courseDataWithStats
+      })
+  
+      res.status(200).json({ courses: courseData })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: "Server Error" })
+    }
+  }
+  

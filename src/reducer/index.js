@@ -3,6 +3,7 @@ import authReducers from '../slices/authSlice'
 import profileReducer from "../slices/profileSlice"
 import cartReducer from '../slices/cartSlice'
 import courseReducer from '../slices/courseSlice'
+import viewCourseReducer from "../slices/viewCourseSlice"
 
 
 //EXPLORE ABOUT THIS
@@ -12,7 +13,7 @@ const rootReducer=combineReducers({
     profile:profileReducer,
     cart:cartReducer,
     course:courseReducer,
-    // viewCourse:viewCourseReducer,
+    viewCourse:viewCourseReducer,
     
 
 })
