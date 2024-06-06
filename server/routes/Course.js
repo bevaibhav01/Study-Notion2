@@ -3,6 +3,9 @@ const router=express.Router();
 
 //get all the controllers
 const {
+  updateCourseProgress
+} = require("../controllers/courseProgress");
+const {
   createCourse,
   getAllCourses,
   getCourseDetails,
@@ -11,7 +14,6 @@ const {
   getInstructorCourses,
   deleteCourse,
 } = require("../controllers/course")
-
 // Importing Middlewares
 const { auth, isInstructor, isStudent, isAdmin } = require("../middlewares/auth")
 
@@ -32,12 +34,13 @@ const {
   // Rating Controllers Import
   const {
     createRating,
-    getAvgRating,
+    getAverageRating,
     getAllRating,
   } = require("../controllers/RatingAndReview");
 
   const {createCategory,
     showAllCategories,
+    
     categoryPageDetails
   }=require('../controllers/Category');
 
@@ -77,7 +80,13 @@ router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses)
 // // Delete a Course
 router.delete("/deleteCourse", deleteCourse)
 
-//router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
+router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
 
+// ********************************************************************************************************
+//                                      Rating and Review
+// ********************************************************************************************************
+router.post("/createRating", auth, isStudent, createRating)
+router.get("/getAverageRating", getAverageRating)
+router.get("/getReviews", getAllRating)
 module.exports=router;
   
