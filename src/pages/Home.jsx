@@ -8,7 +8,7 @@ import CodeBlocks from '../components/core/HomePage/CodeBlocks'
 import ExploreMore from '../components/core/HomePage/ExploreMore'
 import TimelineSection from '../components/core/HomePage/TimelineSection'
 import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection'
-
+import ReviewSlider from '../components/common/ReviewSlider'
 import Footer from '../components/common/Footer'
 import InstructorSection from '../components/core/HomePage/InstructorSection'
 
@@ -207,7 +207,7 @@ const Home = () => {
         <h1 className="text-center text-4xl font-semibold mt-8">
           Reviews from other learners
         </h1>
-        {/* <ReviewSlider /> */}
+        <ReviewSlider />
       </div>
 
       {/* Footer */}
