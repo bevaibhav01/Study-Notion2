@@ -26,7 +26,7 @@ import Catalog from "./pages/Catalog";
 import CourseDetails from "./pages/CourseDetails";
 import ViewCourse from "./pages/ViewCourse";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails";
-// import Settings from '../src/components/core/Dashboard/Settings/index'
+import Settings from '../src/components/core/Dashboard/Settings/index'
 import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor";
 
 
@@ -98,7 +98,7 @@ function App() {
     >
       <Route path="dashboard/my-profile" element={<MyProfile />} />
       
-      {/* <Route path="dashboard/Settings" element={<Settings />} /> */}
+      <Route path="dashboard/Settings" element={<Settings />} />
       
 
       {
