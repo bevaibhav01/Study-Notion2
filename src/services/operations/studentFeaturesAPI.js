@@ -69,7 +69,10 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
             },
             handler: function(response) {
                 //send successful wala mail
-                console.log("yaha tk agaya")
+                function f(){
+                    console.log(response);
+                }
+                f();
                 sendPaymentSuccessEmail(response, orderResponse.data.data.amount,token );
                 //verifyPayment
                 verifyPayment({...response, courses}, token, navigate, dispatch);
@@ -78,6 +81,7 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
         console.log("options tk chal gaya")
         //miss hogya tha 
         const paymentObject = new window.Razorpay(options);
+        console.log(paymentObject,"payment response");
         paymentObject.open();
         paymentObject.on("payment.failed", function(response) {
             toast.error("oops, payment failed");

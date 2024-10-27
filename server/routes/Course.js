@@ -88,5 +88,14 @@ router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
 router.post("/createRating", auth, isStudent, createRating)
 router.get("/getAverageRating", getAverageRating)
 router.get("/getReviews", getAllRating)
+
+
+//ROUTER FOR QUIZ
+const {createQuiz,submitQuiz}=require('../controllers/Quiz')
+router.post("/createQuiz",createQuiz);
+router.post("/submitQuiz",submitQuiz);
+
+
+
 module.exports=router;
   

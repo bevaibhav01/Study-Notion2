@@ -22,7 +22,35 @@ const {
   GET_FULL_COURSE_DETAILS_AUTHENTICATED,
   CREATE_RATING_API,
   LECTURE_COMPLETION_API,
+  CREATE_QUIZ_API
 } = courseEndpoints
+
+export const createQuiz = async (data, token) => {
+  let result = null
+  const toastId = toast.loading("Loading...")
+
+  try {
+    const response = await apiConnector("POST", CREATE_QUIZ_API, data, {
+      Authorization: `Bearer ${token}`,
+    })
+
+    console.log("CREATE QUIZ API RESPONSE............", response)
+
+    if (!response?.data?.success) {
+      throw new Error("Could Not Create Quiz")
+    }
+
+    toast.success("Quiz Created Successfully")
+    console.log("Updated Course Data:", response?.data.updatedCourse)
+    result = response?.data?.updatedCourse
+  } catch (error) {
+    console.log("CREATE QUIZ API ERROR............", error)
+    toast.error(error.message)
+  }
+
+  toast.dismiss(toastId)
+  return result
+}
 
 export const getAllCourses = async () => {
   const toastId = toast.loading("Loading...")
