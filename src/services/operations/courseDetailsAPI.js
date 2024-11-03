@@ -4,6 +4,7 @@ import { updateCompletedLectures } from "../../slices/viewCourseSlice"
 // import { setLoading } from "../../slices/profileSlice";
 import { apiConnector } from "../apiconnector"
 import { courseEndpoints } from "../apis"
+//import { getQuizResults } from "../../../server/controllers/Quiz"
 
 const {
   COURSE_DETAILS_API,
@@ -22,8 +23,74 @@ const {
   GET_FULL_COURSE_DETAILS_AUTHENTICATED,
   CREATE_RATING_API,
   LECTURE_COMPLETION_API,
-  CREATE_QUIZ_API
+  CREATE_QUIZ_API,
+  GET_QUIZ,
+  SUBMIT_QUIZ
 } = courseEndpoints
+
+export const submitQuizAnswers = async ({ courseId, sectionId, quizId, responses }, token) => {
+  let result = null;
+  const toastId = toast.loading("Submitting...");
+
+  try {
+    // Make sure to send the updated payload structure
+    const response = await apiConnector("POST", SUBMIT_QUIZ, {
+      courseId,
+      sectionId,
+      quizId, // Include quizId in the request
+      responses, // Use the responses array
+    }, {
+      Authorization: `Bearer ${token}`,
+    });
+
+    console.log("SUBMIT QUIZ ANSWERS API RESPONSE............", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could Not Submit Quiz Answers");
+    }
+
+    toast.success("Quiz Submitted Successfully");
+    result = response?.data; // Assuming the result data structure contains necessary information (like score)
+  } catch (error) {
+    console.log("SUBMIT QUIZ ANSWERS API ERROR............", error);
+    toast.error(error.message);
+  }
+
+  toast.dismiss(toastId);
+  return result;
+};
+
+
+export const fetchQuiz = async (sectionId, token) => {
+  let result = null;
+  const toastId = toast.loading("Loading...");
+
+  try {
+    const response = await apiConnector("POST", GET_QUIZ, { sectionId }, {
+      Authorization: `Bearer ${token}`,
+    });
+
+    console.log("FETCH QUIZ DATA API RESPONSE............", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could Not Fetch Quiz Data");
+    }
+
+    toast.success("Quiz Data Fetched Successfully");
+    result = response?.data?.quiz;
+    //console.log(response?.data?.quiz)
+     // Assuming the quiz data is in response.data.quiz
+    //console.log(result)
+  } catch (error) {
+    console.log("FETCH QUIZ DATA API ERROR............", error);
+    toast.error(error.message);
+  }
+ // console.log(result)
+  
+
+  toast.dismiss(toastId);
+  return result;
+};
 
 export const createQuiz = async (data, token) => {
   let result = null

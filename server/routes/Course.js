@@ -91,9 +91,10 @@ router.get("/getReviews", getAllRating)
 
 
 //ROUTER FOR QUIZ
-const {createQuiz,submitQuiz}=require('../controllers/Quiz')
+const {createQuiz,submitQuiz,getQuiz}=require('../controllers/Quiz')
 router.post("/createQuiz",createQuiz);
 router.post("/submitQuiz",submitQuiz);
+router.post("/getQuiz",getQuiz);
 
 
 

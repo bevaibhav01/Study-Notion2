@@ -48,8 +48,9 @@ const initialState = {
   course: null,
   editCourse: false,
   paymentLoading: false,
-  quizLoading: false, // Track loading state for quizzes
-  quizError: null, // Track errors related to quizzes
+  quizLoading: false,
+  quizError: null,
+  quizResults: null, // New state to hold quiz results
 }
 
 const courseSlice = createSlice({
@@ -72,15 +73,15 @@ const courseSlice = createSlice({
       state.step = 1
       state.course = null
       state.editCourse = false
+      state.quizResults = null; // Reset quiz results
     },
-    // Add Quiz Actions
     addQuiz: (state, action) => {
       const { sectionId, quiz } = action.payload;
       const section = state.course.courseContent.find(
         (section) => section._id === sectionId
       );
       if (section) {
-        section.quiz = quiz; // Assign the new quiz to the section
+        section.quiz = quiz;
       }
     },
     removeQuiz: (state, action) => {
@@ -89,7 +90,7 @@ const courseSlice = createSlice({
         (section) => section._id === sectionId
       );
       if (section) {
-        section.quiz = null; // Remove the quiz from the section
+        section.quiz = null;
       }
     },
     setQuizLoading: (state, action) => {
@@ -97,6 +98,10 @@ const courseSlice = createSlice({
     },
     setQuizError: (state, action) => {
       state.quizError = action.payload;
+    },
+    // New action to update quiz results
+    updateQuizResults: (state, action) => {
+      state.quizResults = action.payload; // Update state with quiz results
     },
   },
 })
@@ -111,6 +116,7 @@ export const {
   removeQuiz,
   setQuizLoading,
   setQuizError,
+  updateQuizResults, // Export the new action
 } = courseSlice.actions
 
 export default courseSlice.reducer

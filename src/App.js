@@ -28,7 +28,7 @@ import ViewCourse from "./pages/ViewCourse";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import Settings from '../src/components/core/Dashboard/Settings/index'
 import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor";
-
+import QuizDetails from "./components/core/ViewCourse/QuizDetails";
 
 function App() {
   const dispatch = useDispatch();
@@ -126,21 +126,27 @@ function App() {
     </Route>
     {/* For the watching course lectures */}
     <Route
-          element={
-            <PrivateRoute>
-              <ViewCourse />
-            </PrivateRoute>
-          }
-        >
-          {user?.accountType === ACCOUNT_TYPE.STUDENT && (
-            <>
-              <Route
-                path="view-course/:courseId/section/:sectionId/sub-section/:subSectionId"
-                element={<VideoDetails />}
-              />
-            </>
-          )}
-        </Route>
+  element={
+    <PrivateRoute>
+      <ViewCourse />
+    </PrivateRoute>
+  }
+>
+  {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+    <>
+      <Route
+        path="view-course/:courseId/section/:sectionId/sub-section/:subSectionId"
+        element={<VideoDetails />}
+      />
+      <Route
+        path="view-course/:courseId/section/:sectionId/quiz/:quizId" // Updated route for QuizDetails
+        element={<QuizDetails />}
+      />
+    </>
+  )}
+</Route>
+
+
     <Route
           path="/about"
           element={
