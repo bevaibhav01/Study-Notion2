@@ -29,6 +29,12 @@ import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import Settings from '../src/components/core/Dashboard/Settings/index'
 import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor";
 import QuizDetails from "./components/core/ViewCourse/QuizDetails";
+import CoursesTable from "./components/core/Dashboard/CourseTable";
+import CourseFeebackAnalysis from "./components/core/Dashboard/CourseFeebackAnalysis";
+
+
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -117,7 +123,8 @@ function App() {
           <Route path="dashboard/add-course" element={<AddCourse />} />
           <Route path="dashboard/my-courses" element={<MyCourses />} />
           <Route path="dashboard/edit-course/:courseId" element={<EditCourse />} />
-          
+          <Route path="dashboard/course-feedback-analysis" element={<CoursesTable/>}  />
+          <Route path="dashboard/course-feedback-analysis/:courseId" element={<CourseFeebackAnalysis />} />
           </>
         )
       }
